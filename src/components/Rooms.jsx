@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { Heart, Palette, Shield } from 'lucide-react';
 
 const Rooms = () => {
@@ -77,11 +78,16 @@ const Rooms = () => {
             style={{ animationDelay: `${index * 200}ms` }}
           >
             {/* Image Container */}
-            <div className="relative overflow-hidden">
-              <img 
+            <div className="relative overflow-hidden h-48 sm:h-56 lg:h-64">
+              <Image 
                 src={room.image} 
                 alt={room.title}
-                className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500" 
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-500" 
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZjNmNGY2Ii8+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNlNWU3ZWIiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkMWQ1ZGIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWRpZW50KSIvPjwvc3ZnPg=="
+                sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                quality={85}
               />
               
               {/* Action Buttons */}

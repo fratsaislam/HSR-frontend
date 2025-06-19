@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { Shield, Clock, Headphones, Map } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -60,15 +61,24 @@ const Services = () => {
   }, []);
 
   return (
-    <section
-      className="relative bg-cover bg-center bg-no-repeat h-[528px] flex items-center"
-      style={{ backgroundImage: "url('/assets/service.jpg')" }}
-      id="service"
-    >
-      {/* Background overlay */}
-      <div className="absolute inset-0 bg-black/10"></div>
+    <section className="relative h-[528px] flex items-center overflow-hidden" id="service">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/service.jpg"
+          alt="Hotel Services Background"
+          fill
+          className="object-cover object-center"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSI1MjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzY2NjI2NiIvPjxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjNzU3MTc1Ii8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNTI0ZTUyIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkaWVudCkiLz48L3N2Zz4="
+          quality={85}
+          priority={false}
+        />
+        {/* Background overlay */}
+        <div className="absolute inset-0 bg-black/10 z-10"></div>
+      </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         <div className="flex justify-center lg:justify-end">
           <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl lg:mr-8 xl:mr-16">
             <div className="px-4 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6 lg:py-8 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl">
