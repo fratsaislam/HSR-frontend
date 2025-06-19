@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import axiosInstance from "@/utils/axiosInstance";
 import "md-editor-rt/lib/style.css";
 import Image from "next/image"
+import { useAuth } from "@/utils/useAuth";
 
 // Dynamically import MdEditor to avoid SSR issues
 const MdEditor = dynamic(() => import("md-editor-rt").then((mod) => mod.MdEditor), { ssr: false });
@@ -13,6 +14,7 @@ const MdEditor = dynamic(() => import("md-editor-rt").then((mod) => mod.MdEditor
 const EditPost = () => {
   const { id } = useParams();
   const router = useRouter();
+  const { user } = useAuth();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");

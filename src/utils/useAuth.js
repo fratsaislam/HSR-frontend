@@ -13,7 +13,7 @@ export const useAuth = () => {
       try {
         const response = await fetch('https://hsr-backend-1.onrender.com/api/auth/check', {
           method: 'GET',
-          credentials: 'include', // Important for cookies
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -21,9 +21,23 @@ export const useAuth = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setIsAuthenticated(true);
-          setUser(data.user);
+          console.log('Full response:', data); // Debug line
+          
+          // Check if the response has success: true and user data
+          if (data.success && data.user) {
+            setIsAuthenticated(true);
+            setUser(data.user);
+            console.log('User set:', data.user); // Debug line
+          } else {
+            // Backend returned 200 but success: false
+            setIsAuthenticated(false);
+            setUser(null);
+            router.push('/');
+          }
         } else {
+          // Handle non-200 responses
+          const errorData = await response.json().catch(() => ({}));
+          console.log('Auth failed:', response.status, errorData);
           setIsAuthenticated(false);
           setUser(null);
           router.push('/');

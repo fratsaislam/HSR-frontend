@@ -2,7 +2,7 @@
 import { useAuth } from "@/utils/useAuth";
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, isAuthenticated } = useAuth();
 
   if (loading) {
     return (
@@ -12,10 +12,19 @@ export default function DashboardPage() {
     );
   }
 
+  if (!isAuthenticated || !user) {
+    return (
+      <div>
+        <h1>Not authenticated</h1>
+        <p>Please log in to access this page.</p>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h1>Welcome {user?.username || "Guest"}</h1>
-      <p>Email: {user?.email || "No email available"}</p>
+      <h1>Welcome {user.username}</h1>
+      <p>Email: {user.email}</p>
     </div>
   );
 }
