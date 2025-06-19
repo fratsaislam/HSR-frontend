@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import axiosPlain from "../../utils/axiosPlain";
 import COUNTRY_CODES from "../../utils/countryCodes";
 import Navbar from "@/components/Navbar";
-
+import { useRouter } from "next/navigation";
 
 /* ---------- 58 Algerian wilayas ---------- */
 const WILAYAS = [
@@ -32,6 +32,8 @@ const ReservationForm = () => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
+
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,6 +68,7 @@ const ReservationForm = () => {
         wilaya: "",
         countryCode: "+213",
       });
+      router.push("/");
     } catch (error) {
       console.error("Submission failed:", error);
       alert("There was a problem submitting your reservation.");
