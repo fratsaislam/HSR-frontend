@@ -13,7 +13,6 @@ const App = () => {
   return (
     <div className="font-['Poppins'] scroll-smooth">
       <Header />
-      <Booking />
       <About />
       <Rooms />
       <Services />

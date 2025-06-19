@@ -5,6 +5,7 @@ import "md-editor-rt/lib/style.css";
 import axiosInstance from "@/utils/axiosInstance"; // adjust path if needed
 import { useAuth } from "../../../utils/useAuth";
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/Navbar"
 
 // Dynamic import to avoid hydration issues in Next.js
 const MdEditor = dynamic(() => import('md-editor-rt').then((mod) => mod.MdEditor), { ssr: false });
@@ -17,7 +18,6 @@ const CreatePost = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const { user } = useAuth();
-
   const router = useRouter();
 
   const handleThumbnailChange = (e) => {
@@ -77,59 +77,216 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-6">Create New Post</h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block font-medium">Title</label>
-          <input
-            type="text"
-            className="w-full border p-2 rounded"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+    <div>
+      <div className="pt-20">
+        <Navbar/>
+      </div>
+      <div className="min-h-screen bg-slate-50">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center space-x-3 mb-4">
+              <button
+                onClick={() => router.back()}
+                className="inline-flex items-center text-slate-600 hover:text-slate-900 transition-colors duration-150"
+              >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span className="text-sm font-medium">Back to Blog</span>
+              </button>
+            </div>
+            
+            <div className="flex items-center space-x-3 mb-4">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
+                NEW POST
+              </span>
+              <span className="text-slate-400">•</span>
+              <span className="text-sm text-slate-500">Hotel Content Management</span>
+            </div>
+            
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Create New Post</h1>
+            <p className="text-slate-600">Share your hotel insights and expertise</p>
+          </div>
+
+          {/* Form */}
+          <div className="bg-white border border-slate-200 rounded-lg shadow-sm">
+            <div className="p-8">
+              <form onSubmit={handleSubmit} className="space-y-8">
+                
+                {/* Title Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-900 mb-2">
+                    Post Title
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-md text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all duration-150"
+                    placeholder="Enter a compelling title..."
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {/* Description Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-900 mb-2">
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-md text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all duration-150"
+                    placeholder="Brief description of your post..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {/* Thumbnail Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-900 mb-2">
+                    Featured Image
+                  </label>
+                  
+                  {/* Preview Image */}
+                  {thumbnail && (
+                    <div className="relative w-full h-64 mb-4 bg-white border border-slate-200 rounded-md overflow-hidden">
+                      <img
+                        src={URL.createObjectURL(thumbnail)}
+                        alt="Thumbnail preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-3 left-3">
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700 border border-green-200">
+                          PREVIEW
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setThumbnail(null)}
+                        className="absolute top-3 right-3 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+
+                  {/* File Upload */}
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleThumbnailChange}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      required
+                    />
+                    <div className="flex items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-md hover:border-slate-400 transition-colors duration-150 bg-slate-50">
+                      <div className="text-center">
+                        <svg className="w-8 h-8 text-slate-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p className="text-sm font-medium text-slate-600">
+                          {thumbnail ? 'Click to change image' : 'Click to upload featured image'}
+                        </p>
+                        <p className="text-xs text-slate-400 mt-1">PNG, JPG, GIF up to 10MB</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {thumbnail && (
+                    <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-md">
+                      <div className="flex items-center">
+                        <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-sm font-medium text-green-800">Image selected: </span>
+                        <span className="text-sm text-green-700">{thumbnail.name}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Body Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-900 mb-2">
+                    Content
+                  </label>
+                  <div className="border border-slate-200 rounded-md overflow-hidden">
+                    <MdEditor
+                      modelValue={body}
+                      onChange={setBody}
+                      onUploadImg={uploadImage}
+                      language="en-US"
+                      previewTheme="github"
+                      style={{ height: "500px" }}
+                      toolbarsExclude={['sub', 'sup', 'codeRow', 'code', 'table', 'mermaid', 'katex', 'revoke', 'next', 'save', 'htmlPreview', 'github', 'catalog']}
+                    />
+                  </div>
+                  <p className="text-xs text-slate-500 mt-2">
+                    Use Markdown syntax for formatting. Preview available in the right panel.
+                  </p>
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex items-center justify-between pt-6 border-t border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => router.back()}
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors duration-150"
+                  >
+                    Cancel
+                  </button>
+                  
+                  <div className="flex items-center space-x-3">
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors duration-150"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      </svg>
+                      Save Draft
+                    </button>
+                    
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="inline-flex items-center px-6 py-2 text-sm font-medium text-white bg-slate-900 border border-transparent rounded-md hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                    >
+                      {submitting ? (
+                        <>
+                          <svg className="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
+                          Publishing...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                          </svg>
+                          Publish Post
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-8 text-center">
+            <p className="text-xs text-slate-500">
+              Your post will be published immediately and visible to all visitors
+            </p>
+          </div>
         </div>
-        <div>
-          <label className="block font-medium">Description</label>
-          <input
-            type="text"
-            className="w-full border p-2 rounded"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label className="block font-medium">Thumbnail Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleThumbnailChange}
-            className="w-full"
-            required
-          />
-        </div>
-        <div>
-          <label className="block font-medium mb-2">Body (Markdown)</label>
-          <MdEditor
-            modelValue={body}
-            onChange={setBody}
-            onUploadImg={uploadImage}
-            language="en-US"
-            previewTheme="github"
-            style={{ height: "400px" }}
-            toolbarsExclude={['sub', 'sup', 'codeRow', 'code', 'table', 'mermaid', 'katex', 'revoke', 'next', 'save', 'htmlPreview', 'github', 'catalog']}
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={submitting}
-          className="px-6 py-2 bg-pink-600 text-white rounded hover:bg-pink-700 transition"
-        >
-          {submitting ? "Submitting..." : "Publish Post"}
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

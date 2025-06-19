@@ -55,7 +55,7 @@ const PostList = () => {
 
   return (
     <div className="roboto-en">
-      <div className="bg-pink-600 backdrop-blur-md shadow-md">
+      <div className="pt-20">
         <Navbar />
       </div>
       <div className="max-w-6xl mx-auto px-4 py-10">

@@ -1,30 +1,26 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { Heart, Palette, Shield } from 'lucide-react';
 
 const Rooms = () => {
   const rooms = [
     {
       id: 1,
-      image: '/assets/room-1.jpg',
+      image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop',
       title: 'Deluxe Ocean View',
-      description: 'Bask in luxury with breathtaking ocean views from your private suite.',
-      price: '$299/night'
+      description: 'Bask in luxury with breathtaking ocean views from your private suite.'
     },
     {
       id: 2,
-      image: '/assets/room-2.jpg',
+      image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop',
       title: 'Executive Cityscape Room',
-      description: 'Experience urban elegance and modern comfort in the heart of the city.',
-      price: '$199/night'
+      description: 'Experience urban elegance and modern comfort in the heart of the city.'
     },
     {
       id: 3,
-      image: '/assets/room-3.jpg',
+      image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop',
       title: 'Family Garden Retreat',
-      description: 'Spacious and inviting, perfect for creating cherished memories with loved ones.',
-      price: '$249/night'
+      description: 'Spacious and inviting, perfect for creating cherished memories with loved ones.'
     }
   ];
 
@@ -63,8 +59,65 @@ const Rooms = () => {
         </h2>
       </div>
 
-      {/* Rooms Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
+      {/* Rooms Grid - Mobile: side by side scrollable, Desktop: 3 column grid */}
+      <div className="block sm:hidden">
+        {/* Mobile Layout - Horizontal scroll */}
+        <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+          {rooms.map((room, index) => (
+            <div
+              key={room.id}
+              ref={el => itemRefs.current[index] = el}
+              data-index={index}
+              className={`group bg-white overflow-hidden rounded-xl shadow-lg flex-shrink-0 w-72 snap-start transform transition-all duration-300 ${
+                visibleItems.includes(index)
+                  ? 'animate-fade-in-up'
+                  : 'opacity-0 translate-y-12'
+              }`}
+              style={{ animationDelay: `${index * 200}ms` }}
+            >
+              {/* Image Container */}
+              <div className="relative overflow-hidden h-48">
+                <img 
+                  src={room.image} 
+                  alt={room.title}
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                />
+                
+                {/* Action Buttons */}
+                <div className="absolute right-3 bottom-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+                  <button className="p-2 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl text-pink-500 hover:text-pink-600 transition-all duration-300 ease-out hover:scale-110 active:scale-95">
+                    <Heart size={16} />
+                  </button>
+                  <button className="p-2 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl text-purple-500 hover:text-purple-600 transition-all duration-300 ease-out hover:scale-110 active:scale-95">
+                    <Palette size={16} />
+                  </button>
+                  <button className="p-2 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl text-blue-500 hover:text-blue-600 transition-all duration-300 ease-out hover:scale-110 active:scale-95">
+                    <Shield size={16} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-5 space-y-3">
+                <h4 className="text-lg font-semibold text-gray-900 group-hover:text-pink-600 transition-colors duration-300">
+                  {room.title}
+                </h4>
+                
+                <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
+                  {room.description}
+                </p>
+                
+                <button className="w-full px-4 py-2.5 text-sm text-white bg-pink-600 rounded-lg font-medium hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-98 shadow-md hover:shadow-lg">
+                  Explore Room
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop Layout - 3 column grid */}
+      <div className="hidden sm:grid sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
         {rooms.map((room, index) => (
           <div
             key={room.id}
@@ -79,15 +132,10 @@ const Rooms = () => {
           >
             {/* Image Container */}
             <div className="relative overflow-hidden h-48 sm:h-56 lg:h-64">
-              <Image 
+              <img 
                 src={room.image} 
                 alt={room.title}
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-500" 
-                placeholder="blur"
-                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZjNmNGY2Ii8+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNlNWU3ZWIiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkMWQ1ZGIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWRpZW50KSIvPjwvc3ZnPg=="
-                sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                quality={85}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
               />
               
               {/* Action Buttons */}
@@ -102,13 +150,6 @@ const Rooms = () => {
                   <Shield size={16} className="sm:w-5 sm:h-5" />
                 </button>
               </div>
-
-              {/* Price Badge */}
-              <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
-                <span className="px-3 py-1 sm:px-4 sm:py-2 bg-pink-600 text-white text-xs sm:text-sm font-medium rounded-full shadow-lg">
-                  {room.price}
-                </span>
-              </div>
             </div>
 
             {/* Content */}
@@ -121,14 +162,9 @@ const Rooms = () => {
                 {room.description}
               </p>
               
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 pt-2">
-                <div className="text-center sm:text-left">
-                  <span className="text-xs sm:text-sm text-gray-500 block sm:inline">Starting from </span>
-                  <span className="text-lg sm:text-xl font-bold text-gray-900 block sm:inline">{room.price}</span>
-                </div>
-                
+              <div className="pt-2">
                 <button className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base text-white bg-pink-600 rounded-lg font-medium hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
-                  Book Now
+                  Explore
                 </button>
               </div>
             </div>
@@ -137,11 +173,43 @@ const Rooms = () => {
       </div>
 
       {/* View All Button - Mobile */}
-      <div className="text-center mt-8 sm:mt-12 lg:hidden">
-        <button className="px-6 py-3 text-pink-600 border-2 border-pink-600 rounded-lg font-medium hover:bg-pink-600 hover:text-white transition-all duration-300">
+      <div className="text-center mt-8 sm:hidden">
+        <button className="px-8 py-3 text-pink-600 border-2 border-pink-600 rounded-lg font-medium hover:bg-pink-600 hover:text-white transition-all duration-300 ease-out hover:scale-105 active:scale-95">
           View All Rooms
         </button>
       </div>
+
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fade-in-up {
+          animation: fade-in-up 0.6s ease-out forwards;
+        }
+        
+        .line-clamp-3 {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
     </section>
   );
 };
