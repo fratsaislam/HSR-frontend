@@ -29,8 +29,8 @@ const Navbar = () => {
   return (
     <nav className="w-full z-50 md:bg-transparent bg-pink-600 backdrop-blur-sm ">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="max-w-[120px]">
-          <a href="#" className="text-white font-bold text-xl max-h-[80px]">
+        <div className="max-w-[120px] h-[60px] flex items-center">
+          <a href="#" className="text-white font-bold text-xl">
             <img src="/assets/logo.png" alt="Logo" className="max-h-[60px]"/>
           </a>
         </div>
@@ -106,6 +106,17 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-pink-700/95 backdrop-blur-sm">
           <ul onClick={closeMenu}>
+            <li>
+              <button
+                onClick={() => {
+                  router.push("/");
+                  closeMenu();
+                }}
+                className="block w-full text-left px-4 py-3 text-white hover:bg-pink-800 transition-colors duration-300"
+              >
+                Home
+              </button>
+            </li>
             {navItems.map((item) => (
               <li key={item}>
                 <button
@@ -128,6 +139,39 @@ const Navbar = () => {
                 className="block w-full text-left px-4 py-3 text-white hover:bg-pink-800 transition-colors duration-300"
               >
                 News
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  router.push("/review");
+                  closeMenu();
+                }}
+                className="block w-full text-left px-4 py-3 text-white hover:bg-pink-800 transition-colors duration-300"
+              >
+                Review
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  router.push("/contactus");
+                  closeMenu();
+                }}
+                className="block w-full text-left px-4 py-3 text-white hover:bg-pink-800 transition-colors duration-300"
+              >
+                Contact Us
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  router.push("/gallery");
+                  closeMenu();
+                }}
+                className="block w-full text-left px-4 py-3 text-white hover:bg-pink-800 transition-colors duration-300"
+              >
+                Gallery
               </button>
             </li>
             <li>
