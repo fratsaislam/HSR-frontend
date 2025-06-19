@@ -1,40 +1,45 @@
 'use client';
-
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
 
 export const useAuth = () => {
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       try {
-        const rawCookie = document.cookie
-          .split('; ')
-          .find(c => c.startsWith('Authorization='));
+        const response = await fetch('https://hsr-backend-1.onrender.com/api/auth/check', {
+          method: 'GET',
+          credentials: 'include', // Important for cookies
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-        if (!rawCookie) throw new Error('No Authorization cookie');
-
-        const cookieValue = decodeURIComponent(rawCookie.split('=')[1]);
-
-        const token = cookieValue.startsWith('Bearer ')
-          ? cookieValue.slice(7)
-          : cookieValue;
-
-        const decoded = jwtDecode(token); // ✅ working now
-
-        const now = Math.floor(Date.now() / 1000);
-        if (!decoded.exp || decoded.exp < now) {
-          throw new Error('Token expired');
+        if (response.ok) {
+          const data = await response.json();
+          setIsAuthenticated(true);
+          setUser(data.user);
+        } else {
+          setIsAuthenticated(false);
+          setUser(null);
+          router.push('/');
         }
-
-      } catch (err) {
-        console.warn('Auth check failed:', err.message);
+      } catch (error) {
+        console.warn('Auth check failed:', error);
+        setIsAuthenticated(false);
+        setUser(null);
         router.push('/');
+      } finally {
+        setLoading(false);
       }
     };
 
     checkAuth();
   }, [router]);
+
+  return { isAuthenticated, user, loading };
 };
