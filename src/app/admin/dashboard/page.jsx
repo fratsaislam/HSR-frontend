@@ -1,20 +1,21 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import getEmailFromToken from "@/utils/getEmailFromToken";
 import { useAuth } from "@/utils/useAuth";
 
 export default function DashboardPage() {
-  const [email, setEmail] = useState("");
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const {user} = useAuth();
-    setEmail(userEmail);
-  }, []);
+  if (loading) {
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <h1>Welcome {user.username || "Loading..."}</h1>
+      <h1>Welcome {user?.username || "Guest"}</h1>
+      <p>Email: {user?.email || "No email available"}</p>
     </div>
   );
 }

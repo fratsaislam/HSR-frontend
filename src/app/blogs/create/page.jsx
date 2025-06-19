@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import dynamic from 'next/dynamic';
 import "md-editor-rt/lib/style.css";
-import axiosInstance from "@/utils/axiosInstance"; // adjust path if needed
+import axiosInstance from "@/utils/axiosInstance";
 import { useAuth } from "../../../utils/useAuth";
 import { useRouter } from "next/navigation";
 
@@ -16,9 +16,18 @@ const CreatePost = () => {
   const [thumbnail, setThumbnail] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  useAuth();
-
+  // Call useAuth at top level and handle loading
+  const { user, loading } = useAuth();
   const router = useRouter();
+
+  // Show loading while authentication is being checked
+  if (loading) {
+    return (
+      <div className="max-w-3xl mx-auto py-10 px-4">
+        <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
 
   const handleThumbnailChange = (e) => {
     setThumbnail(e.target.files[0]);
@@ -30,11 +39,19 @@ const CreatePost = () => {
     for (const file of files) {
       const formData = new FormData();
       formData.append('file', file);
-      const response = await axiosInstance('/api/upload', {
-        formData,
-      });
-      const data = await response.json();
-      urls.push(data.url);
+      
+      try {
+        // Fixed: use proper axios call
+        const response = await axiosInstance.post('/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        urls.push(response.data.url);
+      } catch (error) {
+        console.error('Image upload failed:', error);
+        // Handle upload error - you might want to show a user-friendly message
+      }
     }
     return urls;
   };
@@ -67,7 +84,11 @@ const CreatePost = () => {
       setDescription("");
       setBody("");
       setThumbnail(null);
-      router.push("/blogs")
+      // Reset file input
+      const fileInput = document.querySelector('input[type="file"]');
+      if (fileInput) fileInput.value = '';
+      
+      router.push("/blogs");
     } catch (error) {
       console.error("Error:", error);
       alert("Submission failed.");
@@ -79,6 +100,9 @@ const CreatePost = () => {
   return (
     <div className="max-w-3xl mx-auto py-10 px-4">
       <h1 className="text-2xl font-bold mb-6">Create New Post</h1>
+      {user && (
+        <p className="mb-4 text-gray-600">Creating as: {user.username}</p>
+      )}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block font-medium">Title</label>
@@ -125,7 +149,7 @@ const CreatePost = () => {
         <button
           type="submit"
           disabled={submitting}
-          className="px-6 py-2 bg-pink-600 text-white rounded hover:bg-pink-700 transition"
+          className="px-6 py-2 bg-pink-600 text-white rounded hover:bg-pink-700 transition disabled:opacity-50"
         >
           {submitting ? "Submitting..." : "Publish Post"}
         </button>

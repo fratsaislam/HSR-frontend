@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axiosInstance";
-import getEmailFromToken from "@/utils/getEmailFromToken";
 import Navbar from "../../components/Navbar";
+import { useAuth } from "@/utils/useAuth"; 
 
 const ReviewsPage = () => {
   const [reviews, setReviews] = useState([]);
@@ -22,8 +22,9 @@ const ReviewsPage = () => {
       setReviews(res.data.data);
       setTotalPages(res.data.totalPages);
 
-      const email = getEmailFromToken();
-      setAdminEmail(email);
+      const {user} = useAuth();
+
+      setAdminEmail(user);
     } catch (err) {
       console.error("Failed to fetch reviews:", err);
     } finally {
