@@ -1,4 +1,6 @@
+"use client"
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 const Footer = () => {
   const quickLinks = [
@@ -23,6 +25,8 @@ const Footer = () => {
     { name: 'twitter', src: '/assets/twitter.png' }
   ];
 
+  const router = useRouter();
+  
   return (
     <footer className="bg-[#0c0a09]" id="contact">
       <div className="max-w-6xl mx-auto px-4 py-20">
@@ -41,7 +45,7 @@ const Footer = () => {
               truly extraordinary.
             </p>
             
-            <button className="px-6 py-3 text-white bg-pink-600 rounded-md font-medium hover:bg-pink-700 transition-colors duration-300">
+            <button className="px-6 py-3 text-white bg-pink-600 rounded-md font-medium hover:bg-pink-700 transition-colors duration-300" onClick={() => router.push("/reservation")}>
               Book Now
             </button>
           </div>
@@ -95,10 +99,10 @@ const Footer = () => {
             <ul className="grid gap-4 mb-8">
               <li>
                 <a 
-                  href="mailto:rayalpark@info.com" 
+                  href="mailto:intasrain@gmail.com" 
                   className="text-gray-500 hover:text-white transition-colors duration-300"
                 >
-                  rayalpark@info.com
+                  intasrain@gmail.com
                 </a>
               </li>
             </ul>
