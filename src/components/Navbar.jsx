@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import Image from "next/image";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,16 +31,7 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="max-w-[120px] h-[60px] flex items-center">
           <a href="#" className="text-white font-bold text-xl">
-            <Image 
-              src="/assets/logo.png" 
-              alt="Logo" 
-              width={120}
-              height={60}
-              className="max-h-[60px] w-auto"
-              priority
-              placeholder="blur"
-              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjYwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNlZGQ5ZTgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmMmU5ZWYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWRpZW50KSIvPjwvc3ZnPg=="
-            />
+            <img src="/assets/logo.png" alt="Logo" className="max-h-[60px]"/>
           </a>
         </div>
 
