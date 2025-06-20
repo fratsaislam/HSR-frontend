@@ -4,12 +4,12 @@ import axiosPlain from "@/utils/axiosPlain";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { Star, User, Calendar, MessageSquare, Send, Loader2, CheckCircle } from "lucide-react";
-import "../../globals.css"
+import "../../globals.css";
 
 const InputField = ({ icon: Icon, label, type, name, value, onChange, required = true, rows }) => (
-  <div className="space-y-2">
-    <label className="block text-sm font-semibold text-gray-700">
-      <Icon className="w-4 h-4 inline mr-2" />
+  <div className="space-y-1">
+    <label className="block text-sm font-medium text-gray-800 mb-1">
+      <Icon className="w-4 h-4 inline mr-2 text-gray-500" />
       {label}
     </label>
     {type === 'textarea' ? (
@@ -19,10 +19,9 @@ const InputField = ({ icon: Icon, label, type, name, value, onChange, required =
         onChange={onChange}
         rows={rows}
         required={required}
-        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 
-                   focus:border-blue-500 transition-all duration-200 resize-none
-                   placeholder-gray-400 text-gray-700 bg-white shadow-sm
-                   hover:border-gray-400"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 
+                   focus:border-pink-500 transition-all duration-200 resize-none
+                   placeholder-gray-400 text-gray-800 bg-white shadow-sm"
         placeholder={`Enter your ${label.toLowerCase()}...`}
       />
     ) : (
@@ -32,10 +31,9 @@ const InputField = ({ icon: Icon, label, type, name, value, onChange, required =
         value={value}
         onChange={onChange}
         required={required}
-        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 
-                   focus:border-blue-500 transition-all duration-200
-                   placeholder-gray-400 text-gray-700 bg-white shadow-sm
-                   hover:border-gray-400"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 
+                   focus:border-pink-500 transition-all duration-200
+                   placeholder-gray-400 text-gray-800 bg-white shadow-sm"
         placeholder={type === 'date' ? '' : `Enter your ${label.toLowerCase()}...`}
       />
     )}
@@ -86,9 +84,9 @@ const ReviewForm = () => {
   };
 
   const StarRating = () => (
-    <div className="space-y-2 roboto-en">
-      <label className="block text-sm font-semibold text-gray-700 mb-3">
-        <Star className="w-4 h-4 inline mr-2" />
+    <div className="space-y-1">
+      <label className="block text-sm font-medium text-gray-800 mb-1 roboto-en">
+        <Star className="w-4 h-4 inline mr-2 text-gray-500" />
         Rating
       </label>
       <div className="flex gap-2 items-center">
@@ -97,47 +95,43 @@ const ReviewForm = () => {
             key={star}
             type="button"
             onClick={() => handleStarClick(star)}
-            className={`text-3xl transition-all duration-200 hover:scale-110 ${
-              form.stars >= star 
-                ? "text-amber-400 drop-shadow-sm" 
-                : "text-gray-300 hover:text-amber-200"
+            className={`text-2xl transition-transform duration-150 hover:scale-110 ${
+              form.stars >= star
+                ? "text-yellow-400"
+                : "text-gray-300 hover:text-yellow-300"
             }`}
           >
             ★
           </button>
         ))}
         <span className="ml-3 text-sm text-gray-600 font-medium">
-          {form.stars > 0 ? `${form.stars}/5` : "Select rating"}
+          {form.stars > 0 ? `${form.stars}/5` : "No rating yet"}
         </span>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 roboto-en">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 roboto-en">
       <div className="pt-20">
         <Navbar />
       </div>
-      
-      <div className="max-w-2xl mx-auto py-12 px-4">
-        {/* Header */}
+      <div className="max-w-2xl mx-auto py-16 px-6">
         <div className="text-center mb-12">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full 
-                          flex items-center justify-center mx-auto mb-6">
-            <MessageSquare className="w-8 h-8 text-white" />
+          <div className="w-14 h-14 bg-gradient-to-br from-pink-600 to-indigo-600 rounded-full 
+                          flex items-center justify-center mx-auto mb-5 shadow-md">
+            <MessageSquare className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl font-semibold text-gray-800 mb-2">
             Leave a Review
           </h1>
-          <p className="text-lg text-gray-600 max-w-lg mx-auto">
-            Share your experience and help others make informed decisions
+          <p className="text-md text-gray-600 max-w-md mx-auto">
+            Your feedback helps us grow and improve our services.
           </p>
         </div>
 
-        {/* Form Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-          <div className="space-y-8">
-            {/* Name Field */}
+        <div className="bg-white rounded-xl shadow-md border border-gray-200 p-8">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <InputField
               icon={User}
               label="Name"
@@ -146,8 +140,6 @@ const ReviewForm = () => {
               value={form.name}
               onChange={handleChange}
             />
-
-            {/* Date Field */}
             <InputField
               icon={Calendar}
               label="Date"
@@ -156,8 +148,6 @@ const ReviewForm = () => {
               value={form.date}
               onChange={handleChange}
             />
-
-            {/* Review Body */}
             <InputField
               icon={MessageSquare}
               label="Review"
@@ -167,50 +157,42 @@ const ReviewForm = () => {
               onChange={handleChange}
               rows={5}
             />
-
-            {/* Star Rating */}
             <StarRating />
 
-            {/* Submit Button */}
-            <div className="pt-4">
-              {submitted ? (
-                <div className="w-full py-4 px-6 bg-green-50 border border-green-200 rounded-xl
-                               flex items-center justify-center gap-3 text-green-700 font-semibold">
-                  <CheckCircle className="w-5 h-5" />
-                  Review submitted successfully! Redirecting...
-                </div>
-              ) : (
-                <button
-                  onClick={handleSubmit}
-                  disabled={submitting}
-                  className="w-full py-4 px-6 bg-gradient-to-r from-pink-600 to-purple-600 
-                             text-white font-semibold rounded-xl shadow-lg
-                             hover:from-pink-700 hover:to-purple-700 
-                             transform hover:scale-[1.02] transition-all duration-200
-                             disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
-                             flex items-center justify-center gap-3"
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Submitting...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5" />
-                      Submit Review
-                    </>
-                  )}
-                </button>
-              )}
-            </div>
-          </div>
+            {submitted ? (
+              <div className="w-full py-3 px-4 bg-green-100 border border-green-300 rounded-lg
+                             flex items-center justify-center text-green-700 font-medium gap-2">
+                <CheckCircle className="w-5 h-5" />
+                Submitted! Redirecting...
+              </div>
+            ) : (
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-3 px-6 bg-pink-600 text-white font-semibold rounded-lg shadow
+                           hover:bg-pink-700 transition-all duration-200
+                           flex items-center justify-center gap-2
+                           disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    Submit Review
+                  </>
+                )}
+              </button>
+            )}
+          </form>
         </div>
 
-        {/* Footer Note */}
-        <div className="text-center mt-8">
+        <div className="text-center mt-6">
           <p className="text-sm text-gray-500">
-            Your review will be visible to other customers after submission
+            Once submitted, your review may be publicly visible.
           </p>
         </div>
       </div>

@@ -62,7 +62,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">Phone</h3>
-                    <p className="text-gray-900 font-medium text-sm">+1 (555) 123-4567</p>
+                    <p className="text-gray-900 font-medium text-sm">+213 0795150298</p>
                   </div>
                 </div>
               </div>
@@ -74,7 +74,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">Email</h3>
-                    <p className="text-gray-900 font-medium text-sm">info@hotel.com</p>
+                    <p className="text-gray-900 font-medium text-sm">instasrain@gmail.com</p>
                   </div>
                 </div>
               </div>
@@ -86,7 +86,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">Address</h3>
-                    <p className="text-gray-900 font-medium text-sm">123 Hotel Street, City, State 12345</p>
+                    <p className="text-gray-900 font-medium text-sm">Tiaaroussine, Djaafra, Bordj Bou Arreridj</p>
                   </div>
                 </div>
               </div>
