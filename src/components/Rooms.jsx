@@ -1,24 +1,25 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
 import { Heart, Palette, Shield } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const Rooms = () => {
   const rooms = [
     {
       id: 1,
-      image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop',
+      image: '/assets/room-1.jpg',
       title: 'Deluxe Ocean View',
       description: 'Bask in luxury with breathtaking ocean views from your private suite.'
     },
     {
       id: 2,
-      image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop',
+      image: '/assets/room-1.jpg',
       title: 'Executive Cityscape Room',
       description: 'Experience urban elegance and modern comfort in the heart of the city.'
     },
     {
       id: 3,
-      image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop',
+      image: '/assets/room-1.jpg',
       title: 'Family Garden Retreat',
       description: 'Spacious and inviting, perfect for creating cherished memories with loved ones.'
     }
@@ -26,8 +27,18 @@ const Rooms = () => {
 
   const itemRefs = useRef([]);
   const [visibleItems, setVisibleItems] = useState([]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
+    setIsMounted(true);
+    
+    // Fallback: Make all items visible after a short delay if intersection observer fails
+    const fallbackTimer = setTimeout(() => {
+      setVisibleItems([0, 1, 2]);
+    }, 1000);
+
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
@@ -37,14 +48,20 @@ const Rooms = () => {
           }
         });
       },
-      { threshold: 0.2 }
+      { 
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
     );
 
     itemRefs.current.forEach(ref => {
       if (ref) observer.observe(ref);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      clearTimeout(fallbackTimer);
+    };
   }, []);
 
   return (
@@ -68,19 +85,23 @@ const Rooms = () => {
               key={room.id}
               ref={el => itemRefs.current[index] = el}
               data-index={index}
-              className={`group bg-white overflow-hidden rounded-xl shadow-lg flex-shrink-0 w-72 snap-start transform transition-all duration-300 ${
-                visibleItems.includes(index)
-                  ? 'animate-fade-in-up'
-                  : 'opacity-0 translate-y-12'
+              className={`group bg-white overflow-hidden rounded-xl shadow-lg flex-shrink-0 w-72 snap-start transform transition-all duration-700 ${
+                isMounted && (visibleItems.includes(index) || !visibleItems.length)
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-30 translate-y-4'
               }`}
-              style={{ animationDelay: `${index * 200}ms` }}
+              style={{ animationDelay: `${index * 150}ms` }}
             >
               {/* Image Container */}
               <div className="relative overflow-hidden h-48">
                 <img 
                   src={room.image} 
                   alt={room.title}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  onError={(e) => {
+                    e.target.style.backgroundColor = '#f3f4f6';
+                    e.target.alt = 'Image not found';
+                  }}
                 />
                 
                 {/* Action Buttons */}
@@ -107,7 +128,7 @@ const Rooms = () => {
                   {room.description}
                 </p>
                 
-                <button className="w-full px-4 py-2.5 text-sm text-white bg-pink-600 rounded-lg font-medium hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-98 shadow-md hover:shadow-lg">
+                <button className="w-full px-4 py-2.5 text-sm text-white bg-pink-600 rounded-lg font-medium hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-98 shadow-md hover:shadow-lg" onClick={()=> router.push("/gallery")}>
                   Explore Room
                 </button>
               </div>
@@ -123,19 +144,23 @@ const Rooms = () => {
             key={room.id}
             ref={el => itemRefs.current[index] = el}
             data-index={index}
-            className={`group bg-white overflow-hidden rounded-xl sm:rounded-2xl shadow-lg transform transition-all duration-300 ${
-              visibleItems.includes(index)
-                ? 'animate-fade-in-up'
-                : 'opacity-0 translate-y-12'
+            className={`group bg-white overflow-hidden rounded-xl sm:rounded-2xl shadow-lg transform transition-all duration-700 ${
+              isMounted && (visibleItems.includes(index) || !visibleItems.length)
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-30 translate-y-8'
             }`}
-            style={{ animationDelay: `${index * 200}ms` }}
+            style={{ animationDelay: `${index * 150}ms` }}
           >
             {/* Image Container */}
             <div className="relative overflow-hidden h-48 sm:h-56 lg:h-64">
               <img 
                 src={room.image} 
                 alt={room.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                onError={(e) => {
+                  e.target.style.backgroundColor = '#f3f4f6';
+                  e.target.alt = 'Image not found';
+                }}
               />
               
               {/* Action Buttons */}
@@ -163,7 +188,7 @@ const Rooms = () => {
               </p>
               
               <div className="pt-2">
-                <button className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base text-white bg-pink-600 rounded-lg font-medium hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+                <button className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base text-white bg-pink-600 rounded-lg font-medium hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg" onClick={()=> router.push("/gallery")}>
                   Explore
                 </button>
               </div>
@@ -172,9 +197,12 @@ const Rooms = () => {
         ))}
       </div>
 
-      {/* View All Button - Mobile */}
-      <div className="text-center mt-8 sm:hidden">
-        <button className="px-8 py-3 text-pink-600 border-2 border-pink-600 rounded-lg font-medium hover:bg-pink-600 hover:text-white transition-all duration-300 ease-out hover:scale-105 active:scale-95">
+      {/* View All Button - Shows on all devices */}
+      <div className="text-center mt-8 sm:mt-12 lg:mt-16">
+        <button 
+          className="px-8 py-3 sm:px-10 sm:py-4 text-pink-600 border-2 border-pink-600 rounded-lg font-medium hover:bg-pink-600 hover:text-white transition-all duration-300 ease-out hover:scale-105 active:scale-95 text-sm sm:text-base"
+          onClick={() => router.push("/gallery")}
+        >
           View All Rooms
         </button>
       </div>
@@ -186,21 +214,6 @@ const Rooms = () => {
         }
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
-        }
-        
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .animate-fade-in-up {
-          animation: fade-in-up 0.6s ease-out forwards;
         }
         
         .line-clamp-3 {
