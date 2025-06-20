@@ -202,17 +202,6 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Contact Us Link */}
-            <button
-              onClick={() => {
-                router.push("/contactus");
-                closeMenu();
-              }}
-              className="flex items-center w-full px-4 py-3 text-base font-medium text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-all duration-200"
-            >
-              Contact Us
-            </button>
-
             {/* Mobile CTA Button */}
             <div className="pt-4 pb-2">
               <button 
